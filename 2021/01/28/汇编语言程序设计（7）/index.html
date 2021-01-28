@@ -6,15 +6,15 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>汇编语言程序设计（5） | Unknown Coder</title>
+  <title>汇编语言程序设计（7） | Unknown Coder</title>
   <meta name="author" content="Chen Hao">
   
-  <meta name="description" content="8259中断程序设计">
+  <meta name="description" content="8255并行接口通信程序和8254程序">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="汇编语言程序设计（5）"/>
+  <meta property="og:title" content="汇编语言程序设计（7）"/>
   <meta property="og:site_name" content="Unknown Coder"/>
 
   
@@ -103,7 +103,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> 汇编语言程序设计（5）</h1>
+			<h1> 汇编语言程序设计（7）</h1>
 		</div>
 	
 
@@ -120,45 +120,22 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  
 		 <div class="alert alert-success description">
-			<i class="fa fa-info-circle"></i> 8259中断程序设计
+			<i class="fa fa-info-circle"></i> 8255并行接口通信程序和8254程序
 		 </div> <!-- alert -->
 	  		
 
-	  <h1 id="汇编语言程序设计（5）"><a href="#汇编语言程序设计（5）" class="headerlink" title="汇编语言程序设计（5）"></a>汇编语言程序设计（5）</h1><h2 id="第四节-8259中断程序设计"><a href="#第四节-8259中断程序设计" class="headerlink" title="第四节 8259中断程序设计"></a>第四节 8259中断程序设计</h2><p>8259主要的内容是中断向量的置换，而中断向量的置换需要用到两个功能，我们来复习一下</p>
-<blockquote>
-<p>[INT 21H的35H号功能]</p>
-<p>功能：读取中断向量</p>
-<p>入口参数：AH=35H，AL=中断类型号</p>
-<p>出口参数：ES=中断向量的段基址，BX=中断向量的段基址</p>
-</blockquote>
-<blockquote>
-<p>[INT 21H的25H号功能]</p>
-<p>功能：写入中断向量</p>
-<p>入口参数：AH=25H，AL=中断类型码</p>
-<p>​       DS=中断服务子程序所在代码段的段基址</p>
-<p>​       DX=中断服务子程序的偏移地址</p>
-<p>出口参数：无</p>
-</blockquote>
-<p>置换中断向量的流程如下：</p>
-<p>（1）关中断（CLI）</p>
-<p>（2）读取XX型中断向量，放入一个变量进行保存</p>
-<p>（3）写入用户定义的1CH中断向量的服务程序</p>
-<p>（4）开中断（STI）</p>
-<p>接下来我们举个例子：</p>
-<p>我想把1CH型中断替换成我写在SERVICE中的中断服务子程序</p>
-<p>我们先通过编写READ1C子程序将原本的1CH型中断向量保存在一个变量中</p>
-<p>由于一个中断向量的段基址（2个字节）和偏移地址（2个字节）一共4个字节，所以我们再在数据段定义一个变量OLD1C，类型为DD</p>
-<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%885%EF%BC%89/asm5_1.png" alt="img"></p>
-<p>接下来编写READ1C子程序</p>
-<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%885%EF%BC%89/asm5_2.png" alt="img"></p>
-<p>接下来编写SERVICE中断服务子程序</p>
-<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%885%EF%BC%89/asm5_3.png" alt="img"></p>
-<p>然后我们把SERVICE中断服务子程序地址写入1CH中断向量</p>
-<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%885%EF%BC%89/asm5_4.png" alt="img"></p>
-<p>然后在代码段执行</p>
-<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%885%EF%BC%89/asm5_5.png" alt="img"></p>
-<p>这样就完成了中断向量的置换。</p>
-<p><svg t="1611812608032" class="icon" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2514" width="16" height="16"><path d="M656 240V16H144v992h736V240z" fill="#FEEB9E" p-id="2515"/><path d="M656 16v224h224z" fill="#E6C45F" p-id="2516"/><path d="M895.904 239.824a15.536 15.536 0 0 0-4.464-10.48L666.656 4.56a15.376 15.376 0 0 0-10.336-4.432L656 0H160a32 32 0 0 0-32 32v960a32 32 0 0 0 32 32h704a32 32 0 0 0 32-32V240l-0.096-0.176zM672 54.096L841.904 224H672V54.096zM864 992H160V32h480v224h224v736z" fill="#2B3139" p-id="2517"/><path d="M458.368 611.904l-127.312-127.312a15.84 15.84 0 0 0-22.464 0 15.84 15.84 0 0 0 0 22.464L425.52 624l-116.928 116.944a15.84 15.84 0 0 0 0 22.464 15.84 15.84 0 0 0 22.464 0l127.28-127.28c0.336-0.288 0.752-0.384 1.072-0.704a15.888 15.888 0 0 0 4.64-11.424 15.696 15.696 0 0 0-4.64-11.408c-0.304-0.288-0.704-0.4-1.04-0.688zM704 736H512a16 16 0 1 0 0 32h192a16 16 0 1 0 0-32z" fill="#2B3139" p-id="2518"/></svg><br><a target="_blank" rel="noopener" href="https://github.com/ChensirJ/assembly_programming/blob/main/8259_program.asm">8259程序练习</a></p>
+	  <h1 id="汇编语言程序设计（7）"><a href="#汇编语言程序设计（7）" class="headerlink" title="汇编语言程序设计（7）"></a>汇编语言程序设计（7）</h1><h2 id="第六节-8255并行接口通信程序设计"><a href="#第六节-8255并行接口通信程序设计" class="headerlink" title="第六节 8255并行接口通信程序设计"></a>第六节 8255并行接口通信程序设计</h2><h3 id="1-初始化编程"><a href="#1-初始化编程" class="headerlink" title="1. 初始化编程"></a>1. 初始化编程</h3><p>（1）方式选择控制字</p>
+<p>（2）C口按位置0/1控制字（如果采用方式1需要进行初始化）</p>
+<p>例：8255控制口地址为21BH，编写8255A的初始化程序。</p>
+<p>要求：A口工作在方式0输出，B口工作在方式1输入，C口上半部分输出，下半部分输入。允许B口采用中断方式与CPU交换信息</p>
+<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89/asm7_1.png" alt="img"></p>
+<h2 id="第七节-8254程序设计"><a href="#第七节-8254程序设计" class="headerlink" title="第七节 8254程序设计"></a>第七节 8254程序设计</h2><h3 id="1-初始化编程-1"><a href="#1-初始化编程-1" class="headerlink" title="1. 初始化编程"></a>1. 初始化编程</h3><p>（1）向控制字寄存器写入方式控制字</p>
+<p>（2）向使用的计数器写入计数初值</p>
+<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89/asm7_2.png" alt="img"></p>
+<p>写出该8254初始化程序段，采用二进制计数。</p>
+<p>计数初值 = fclk（要求定时的时间）/ fout（时钟脉冲的周期） = 1ms / (1/2MHz) = 2000</p>
+<p>如图所示很明显是方波，也就是方式3</p>
+<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89/asm7_3.png" alt="img"></p>
 	  
 	</div>
 
@@ -168,13 +145,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2021/01/28/汇编语言程序设计（6）/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2021/01/28/汇编语言程序设计（4）/" type="button" class="btn btn-default ">Next<i
+    <a href="/2021/01/28/汇编语言程序设计（6）/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -238,7 +214,7 @@ var _hmt = _hmt || [];
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%885%EF%BC%89"><span class="toc-article-text">汇编语言程序设计（5）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82-8259%E4%B8%AD%E6%96%AD%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-article-text">第四节 8259中断程序设计</span></a></li></ol></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89"><span class="toc-article-text">汇编语言程序设计（7）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AC%AC%E5%85%AD%E8%8A%82-8255%E5%B9%B6%E8%A1%8C%E6%8E%A5%E5%8F%A3%E9%80%9A%E4%BF%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-article-text">第六节 8255并行接口通信程序设计</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BC%96%E7%A8%8B"><span class="toc-article-text">1. 初始化编程</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AC%AC%E4%B8%83%E8%8A%82-8254%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-article-text">第七节 8254程序设计</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BC%96%E7%A8%8B-1"><span class="toc-article-text">1. 初始化编程</span></a></li></ol></li></ol></li></ol>
 		</div>
 	
 	</div>

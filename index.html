@@ -128,6 +128,45 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2021/01/28/汇编语言程序设计（7）/" title="8255并行接口通信程序和8254程序">汇编语言程序设计（7）</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2021-01-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="汇编语言程序设计（7）"><a href="#汇编语言程序设计（7）" class="headerlink" title="汇编语言程序设计（7）"></a>汇编语言程序设计（7）</h1><h2 id="第六节-8255并行接口通信程序设计"><a href="#第六节-8255并行接口通信程序设计" class="headerlink" title="第六节 8255并行接口通信程序设计"></a>第六节 8255并行接口通信程序设计</h2><h3 id="1-初始化编程"><a href="#1-初始化编程" class="headerlink" title="1. 初始化编程"></a>1. 初始化编程</h3><p>（1）方式选择控制字</p>
+<p>（2）C口按位置0/1控制字（如果采用方式1需要进行初始化）</p>
+<p>例：8255控制口地址为21BH，编写8255A的初始化程序。</p>
+<p>要求：A口工作在方式0输出，B口工作在方式1输入，C口上半部分输出，下半部分输入。允许B口采用中断方式与CPU交换信息</p>
+<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89/asm7_1.png" alt="img"></p>
+<h2 id="第七节-8254程序设计"><a href="#第七节-8254程序设计" class="headerlink" title="第七节 8254程序设计"></a>第七节 8254程序设计</h2><h3 id="1-初始化编程-1"><a href="#1-初始化编程-1" class="headerlink" title="1. 初始化编程"></a>1. 初始化编程</h3><p>（1）向控制字寄存器写入方式控制字</p>
+<p>（2）向使用的计数器写入计数初值</p>
+<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89/asm7_2.png" alt="img"></p>
+<p>写出该8254初始化程序段，采用二进制计数。</p>
+<p>计数初值 = fclk（要求定时的时间）/ fout（时钟脉冲的周期） = 1ms / (1/2MHz) = 2000</p>
+<p>如图所示很明显是方波，也就是方式3</p>
+<p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%887%EF%BC%89/asm7_3.png" alt="img"></p>
+
+	
+	</div>
+  <a type="button" href="/2021/01/28/汇编语言程序设计（7）/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2021/01/28/汇编语言程序设计（6）/" title="8250串口通信程序">汇编语言程序设计（6）</a>
 		</h3>
 		</div>
@@ -604,7 +643,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/数据结构/">数据结构<span>1</span></a></li>
 		
-			<li><a href="/categories/汇编语言/">汇编语言<span>6</span></a></li>
+			<li><a href="/categories/汇编语言/">汇编语言<span>7</span></a></li>
 		
 		</ul>
 	</div>
@@ -617,9 +656,9 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/数据结构/">数据结构<span>1</span></a></li>
 		
-			<li><a href="/tags/数组/">数组<span>1</span></a></li>
+			<li><a href="/tags/汇编语言/">汇编语言<span>7</span></a></li>
 		
-			<li><a href="/tags/汇编语言/">汇编语言<span>6</span></a></li>
+			<li><a href="/tags/数组/">数组<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -631,6 +670,10 @@ var _hmt = _hmt || [];
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2021/01/28/汇编语言程序设计（7）/"  title="8255并行接口通信程序和8254程序" ><i class="fa fa-file-o"></i>汇编语言程序设计（7）</a>
+      </li>
     
       <li>
         <a href="/2021/01/28/汇编语言程序设计（6）/"  title="8250串口通信程序" ><i class="fa fa-file-o"></i>汇编语言程序设计（6）</a>
@@ -646,10 +689,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2021/01/28/汇编语言程序设计（3）/"  title="HelloWorld及Sum程序" ><i class="fa fa-file-o"></i>汇编语言程序设计（3）</a>
-      </li>
-    
-      <li>
-        <a href="/2021/01/28/汇编语言程序设计（2）/"  title="DOS调用" ><i class="fa fa-file-o"></i>汇编语言程序设计（2）</a>
       </li>
     
   </ul>
