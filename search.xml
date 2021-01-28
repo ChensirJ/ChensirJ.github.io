@@ -4,6 +4,81 @@
   
     
     <entry>
+      <title>汇编语言程序设计（4）</title>
+      <link href="2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/"/>
+      <url>2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<h1 id="汇编语言程序设计（4）"><a href="#汇编语言程序设计（4）" class="headerlink" title="汇编语言程序设计（4）"></a>汇编语言程序设计（4）</h1><h2 id="第三节-基础程序设计"><a href="#第三节-基础程序设计" class="headerlink" title="第三节 基础程序设计"></a>第三节 基础程序设计</h2><h4 id="3-程序3-判断！判断！"><a href="#3-程序3-判断！判断！" class="headerlink" title="3. 程序3 判断！判断！"></a>3. 程序3 判断！判断！</h4><p>上一个程序我们写了一个10以内数字的相加程序。不过你仔细测试的话，你会发现这个程序是有Bug的，当我们输入1和9的时候，相加的结果应该是10，但是显示的结果似乎不如我们预期的那样，这次我们通过解决这个程序Bug来了解一下分支程序设计。Bug如下图所示</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_1.png" alt="img"></p><p>我们思考一下这个Bug是如何出现的，当我们两个数的和大于9的时候，程序就出现了Bug，那么这个程序就出现了一个分支，如下图所示</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_2.png" alt="img"></p><p>前面的程序是差不多的，唯一需要改变的地方是在求和之后需要将两数的和和9进行比较</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_3.png" alt="img"></p><p>那么和大于9的话，我们该怎么处理呢？</p><p>10以内的加法运算，最大的结果为9+9 = 18，那么和大于9的话，十位上一定是1，我们可以先显示1。那个位怎么处理呢？如果输入是1（31H）和9（39H）的话，两数相加之后，和应该为10，个位应该为0，而现在和的ASCII码为6AH，减去30H之后，为3AH，而0的ASCII码为30H，所以我们减去30H之后应该再减去0AH，这样个位就为0了，通过DOS的2号功能显示出来。</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_4.png" alt="img"></p><p>运行一下程序，发现Bug解决了</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_5.png" alt="img"></p><h4 id="4-程序4-循环！循环！"><a href="#4-程序4-循环！循环！" class="headerlink" title="4. 程序4 循环！循环！"></a>4. 程序4 循环！循环！</h4><p>有了分支之后，我们还应该学习一下循环，同样是一个非常有用的程序设计结果，比如我们有这么一个烦恼：我想求一下10以内所有数的和（1+2+……+9）放入SUM变量中。这个程序该如何设计呢？汇编语言提供了非常方便的Loop指令进行循环结构。我们只要将循环次数放入CX寄存器，当CX不为0时，循环会一直执行，执行一次循环之后，CX的值会减1。</p><p>（1）数据段设定一个变量SUM存放最后的结果</p><p>（2）因为一共有9个数，所以循环9次，设置CX值为9，同时CX的值正好可以作为要加的数</p><p>（3）将和放入变量SUM</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_6.png" alt="img"></p><p>有了流程之后，同样的我们可以开始写代码了</p><p>首先再数据段定义变量SUM，由于我们不知道最后和为多少，所以先用一个？占用这个地址</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_7.png" alt="img"></p><p>然后便是代码段的编写</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_8.png" alt="img"></p><p>和上面流程图是一样的操作</p><p>这样我们就完成代码的编写了</p><p>至此我们已经学完了程序设计的几种基本结构，下面我再简单讲一下子程序。</p><h4 id="5-子程序！"><a href="#5-子程序！" class="headerlink" title="5. 子程序！"></a>5. 子程序！</h4><p>子程序有点像高级语言中的函数，通过子程序，我们可以把一段逻辑代码进行一个封装，执行同样的功能的时候，我们不需要重复的编写代码，只要调用子程序就行了。</p><p>子程序的基本结构：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">子程序名 PROC</span><br><span class="line"></span><br><span class="line">…</span><br><span class="line"></span><br><span class="line">…</span><br><span class="line"></span><br><span class="line">…</span><br><span class="line"></span><br><span class="line">RET ;返回</span><br><span class="line"></span><br><span class="line">子程序名 ENDP；结束子程序</span><br></pre></td></tr></table></figure><p>调用的话：CALL 子程序名</p><p>比如我们对DOS的2号功能进行封装</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_9.png" alt="img"></p><p>这样我们每次要显示字符的时候就不用重复的写调用指令了，直接CALL DISP就行了，就像下面这样</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_10.png" alt="img"></p><p>结果如下所示：</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%884%EF%BC%89/asm4_11.png" alt="img"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 汇编程序 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编程序 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编语言程序设计（3）</title>
+      <link href="2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/"/>
+      <url>2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<h1 id="汇编语言程序设计（3）"><a href="#汇编语言程序设计（3）" class="headerlink" title="汇编语言程序设计（3）"></a>汇编语言程序设计（3）</h1><h2 id="第三节-基础程序设计"><a href="#第三节-基础程序设计" class="headerlink" title="第三节 基础程序设计"></a>第三节 基础程序设计</h2><h4 id="1-程序1-Hello-World"><a href="#1-程序1-Hello-World" class="headerlink" title="1. 程序1 Hello World!"></a>1. 程序1 Hello World!</h4><p>Hello World是每个程序员都必经的环节，也是通向程序设计大门的敲门砖，那么第一个程序我们就在屏幕上显示一下Hello World！吧，但在开始写代码之前，我希望你能构思一下基本的流程，还记得上一节DOS调用的9号功能吗？，其实步骤差不多的：</p><p>（1）我们需要在数据段定义一个变量存放Hello World！字符串</p><p>（2）调用DOS的9号功能显示字符串</p><p>这个程序还是很简单的，流程非常简单，基本的流程在脑海里已经有了，那么下一步要做的就是编写程序了。</p><p>第一步要做的很显然是把程序的基本框架搭好，我希望你没有忘记怎么搭建框架，如果不熟悉的话，可以返回第一节再看一下。</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_1.png" alt="img"></p><p>框架搭建好了之后按照安排好的流程办事</p><p>在数据段定义一个变量存放Hello World！</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_2.png" alt="img"></p><p>然后在代码段调用DOS的9号功能</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_3.png" alt="img"></p><p>OK！这样一个程序就写好了，我们运行一下看看</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_4.png" alt="img"></p><p>Hello World！显示在屏幕上了！</p><p>恭喜你，你顺利进入了汇编程序设计的大门。</p><p>不要急着高兴，我们来把刚才所做的事情总结一下，将整个过程进行一个抽象：</p><p>（1）我们需要用到什么数据</p><p>（2）我们需要调用什么功能实现</p><p>你只要把这两点想清楚了，整个环节就轻松多了。</p><h4 id="2-程序2-Sum"><a href="#2-程序2-Sum" class="headerlink" title="2. 程序2 Sum!"></a>2. 程序2 Sum!</h4><p>提前输入好字符在屏幕上显示似乎没什么意思，要是我们能输入不同的数字进行加法运算就好了。那么接下来我们来设计一个程序，从键盘输入两个数字(0-9)，最后在屏幕上显示两个数相加的结果吧！</p><p>首先我们要做的依然是进行流程的思考：</p><p>（1）在数据段设立一个输入缓冲区存放输入的数字</p><p>（2）调用DOS的0AH号功能输入数字</p><p>（3）将两个数字相加</p><p>（4）调用DOS的2号功能显示结果</p><p>你可能忘记0AH号功能怎么用了，我们来复习一下吧！</p><blockquote><p>[功能号0AH] 等待从键盘输入字符串，并保存在输入数据缓冲区，同时在屏幕显示字符串</p></blockquote><p>入口参数：DS:DX=输入数据缓冲区首地址</p><p>光看文字你可能不是很了解这个功能如何调用，下面通过一张图来看一下吧</p><p>假设我们在数据段定义的变量名称叫BUF，类型是DB</p><p>BUF的首地址放入我们估计会输入字符的个数，因为0AH功能以回车键作为结束标志，所以这里的个数要在估计的个数上再+1，如果你对个数不确定的话可以写多一点。</p><p>BUF+1的地址一般用一个？，因为在输入之前谁也不知道最后实际会输入多少个字符，所以用一个？先把位置占下来，待输入完之后，系统会自动统计输入的字符的个数，并把？替换成实际输入的字符个数，这里字符个数不包括回车。</p><p>而BUF+2开始的地址会存放你实际键入的字符，而在一开始的时候我们同样也不知道里面会输入什么样的字符，所以也要用？先把位置占下来，这里？的个数和BUF首地址预计输入字符的个数一致，由于一个个输？太麻烦，我们可以用一个简单的指令完成，格式如下：预计输入字符的个数 DUP(?)</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_5.png" alt="img"></p><p>可能你看到这边还是一头雾水，我们来实际看一下我们的这个程序怎么设置吧</p><p>我们思考一下，我们需要键入2个数字字符，中间用空格字符隔开，再加上最后的回车字符，所以我们一共需要4个字符的空间</p><p>我们来看一下数据段怎么定义的吧</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_6.png" alt="img"></p><p>数据段定义好了之后，我们开始代码段的编写。</p><p>和之前程序一样，我们调用DOS的0AH功能，把缓冲区偏移地址赋给DX寄存器</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_7.png" alt="img"></p><p>接下来我们就要从键盘上输入两个数字了</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_8.png" alt="img"></p><p>输入完按了回车之后，这时输入缓冲区BUF+2开始的地址存放着刚才输入的字符，整个输入缓冲区如下所示</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_9.png" alt="img"></p><p>为了显示的更美观，我们在进行数据进行相加之前，先进行换行的操作</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_10.png" alt="img"></p><p>换行之后，我们分别将BUF+2地址中的1和BUF+4地址中的2分别赋给AL,DL寄存器，然后进行相加放入DL寄存器中。</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_11.png" alt="img"></p><p>相加之后DL寄存器的内容为1的ASCII码31H加上2的ASCII码32H = 63H，而3的ASCII码很明显是33H，所以我们需要将结果减去30H</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_12.png" alt="img"></p><p>最后我们在调用DOS的2号功能，由于数据已经放入DL寄存器，所以只要两个指令就行了</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_13.png" alt="img"></p><p>这样一个程序就已经写好了，我们运行一下看看。</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%883%EF%BC%89/asm3_14.png" alt="img"></p><p>结果3显示了出来！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 汇编语言 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编语言 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编语言程序设计（2）</title>
+      <link href="2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/"/>
+      <url>2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<h1 id="汇编语言程序设计（2）"><a href="#汇编语言程序设计（2）" class="headerlink" title="汇编语言程序设计（2）"></a>汇编语言程序设计（2）</h1><h2 id="第二节-DOS功能调用"><a href="#第二节-DOS功能调用" class="headerlink" title="第二节 DOS功能调用"></a>第二节 DOS功能调用</h2><p>在DOS中，已经预先设计好了一些功能方便我们进行输出和输入，我们不用再额外的花费时间进行这些功能的编写，只需要通过几句简单的指令调用便可完成。而DOS的功能调用主要是以下几个步骤：</p><p>（1）用“MOV AH，功能号”设置你要调用哪一个功能</p><p>（2）在功能规定的寄存器中放入入口参数（如果没有入口参数则跳过这步）</p><p>（3）用INT 21H执行调用（21H是DOS的中断号，BIOS是16H）</p><p>（4）从功能规定的寄存器中取出出口参数（如果没有出口参数则跳过这步）</p><p>下面通过一个例子进行讲解</p><p>我们要在屏幕显示一个字符串通过DOS的9号功能</p><blockquote><p>[功能号09H] 显示字符串</p></blockquote><p>入口参数：DS:DX=字符串首地址，字符串必须以’$’为结束标志</p><p>出口参数：无</p><p>第一步要干啥呢？</p><p>在数据段定义一个变量，存放一个显示的字符串，这里我存放的是HELLO！，不要忘记用$结尾!!!</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/asm2_1.png" alt="img"></p><p>定义完了之后我们就可以在代码段写代码调用功能了。</p><p>首先将功能号送给AH寄存器</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/asm2_2.png" alt="img"></p><p>然后根据入口参数的要求，你需要将字符串的首地址送给DS（数据）段的DX寄存器，由于程序一开始已经给DS赋初值了，所以我们这边直接把字符串首地址通过OFFSET给DX寄存器就行了</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/asm2_3.png" alt="img"></p><p>接下来通过INT 21H来执行这个功能</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/asm2_4.png" alt="img"></p><p>运行一下</p><p><img src="/2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%882%EF%BC%89/asm2_5.png" alt="img"></p><p>可以看到HELLO！显示在了屏幕上</p><p>怎么样？还是很简单的吧。通过这个例子，相信你学会了如何进行DOS功能的调用，下面我们即将进入真正的程序设计环节。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 汇编语言 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编语言 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>汇编语言程序设计（1）</title>
       <link href="2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%881%EF%BC%89/"/>
       <url>2021/01/28/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%881%EF%BC%89/</url>
